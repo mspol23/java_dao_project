@@ -23,6 +23,15 @@ public class Main {
 		for(Seller s : list) {
 			System.out.println(s);
 		}
+		
+		System.out.println("\n=== teste 3 - SellerDao - findAll() ===");
+		list = sellerDao.findAll();
+		for(Seller s : list) {
+			System.out.println(s);
+		}
+		
+		
+		
 	}
 
 }
