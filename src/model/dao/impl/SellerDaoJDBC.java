@@ -63,8 +63,31 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void update(Seller obj) {
-		// TODO Auto-generated method stub
-
+		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement("UPDATE seller "
+					+ "SET name = ?, email = ?, birthdate = ?, basesalary = ?, departmentid = ? "
+					+ "WHERE seller.id = ?", Statement.RETURN_GENERATED_KEYS);
+			
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getEmail());
+			st.setDate(3, new Date(obj.getBirthDate().getTime()));
+			st.setDouble(4, 2500.0);
+			st.setObject(5, obj.getDepartment().getId());
+			st.setInt(6, obj.getId());
+	
+			st.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
@@ -96,24 +119,6 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);
 		}
-	}
-
-	private Department createDepartmentInstance(ResultSet rs) throws SQLException {
-		Department dep = new Department();
-		dep.setId(rs.getInt("departmentid"));
-		dep.setName(rs.getString("depname"));
-		return dep;
-	}
-
-	private Seller createSellerInstance(ResultSet rs, Department department) throws SQLException {
-		Seller sel = new Seller();
-		sel.setId(rs.getInt("id"));
-		sel.setName(rs.getString("name"));
-		sel.setEmail(rs.getString("email"));
-		sel.setBirthDate(rs.getDate("birthdate"));
-		sel.setBaseSalary(rs.getDouble("basesalary"));
-		sel.setDepartment(department);
-		return sel;
 	}
 
 	@Override
@@ -188,6 +193,24 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);
 		}
+	}
+	
+	private Department createDepartmentInstance(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("departmentid"));
+		dep.setName(rs.getString("depname"));
+		return dep;
+	}
+
+	private Seller createSellerInstance(ResultSet rs, Department department) throws SQLException {
+		Seller sel = new Seller();
+		sel.setId(rs.getInt("id"));
+		sel.setName(rs.getString("name"));
+		sel.setEmail(rs.getString("email"));
+		sel.setBirthDate(rs.getDate("birthdate"));
+		sel.setBaseSalary(rs.getDouble("basesalary"));
+		sel.setDepartment(department);
+		return sel;
 	}
 
 }

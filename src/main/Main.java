@@ -13,9 +13,10 @@ import model.entities.Seller;
 public class Main {
 
 	public static void main(String[] args) {
+
+		SellerDao sellerDao = DaoFactory.createSellerDao();
 				
 		System.out.println("=== teste 1 - SellerDaoJDBC.findById() ===");
-		SellerDao sellerDao = DaoFactory.createSellerDao();
 		Seller seller1 = sellerDao.findById(3);
 		System.out.println(seller1);
 		
@@ -33,10 +34,17 @@ public class Main {
 			System.out.println(s);
 		}
 		
-		System.out.println("\n=== teste 4 - SellerDao - findAll() ===");
+		System.out.println("\n=== teste 4 - SellerDao - insert() ===");
 		Seller seller2 = new Seller(null, "Ted Dowson", "ted@gmail.com", setFormattedDate("01/05/1990"), 3500.0, depart);
 		sellerDao.insert(seller2);
 		System.out.println("New seller added. Id = " + seller2.getId());
+		
+		System.out.println("\n=== teste 5 - SellerDao - update() ===");
+		Seller seller3 = sellerDao.findById(7);
+		seller3.setName("Jane Fonda");
+		seller3.setEmail("jane@gmail.com");
+		sellerDao.update(seller3);
+		System.out.println("Seller updated: " + seller3.toString());
 		
 	}
 	
