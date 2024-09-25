@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Scanner;
 
 import model.dao.DaoFactory;
 import model.dao.SellerDao;
@@ -13,6 +14,8 @@ import model.entities.Seller;
 public class Main {
 
 	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
 
 		SellerDao sellerDao = DaoFactory.createSellerDao();
 				
@@ -35,9 +38,9 @@ public class Main {
 		}
 		
 		System.out.println("\n=== teste 4 - SellerDao - insert() ===");
-		Seller seller2 = new Seller(null, "Ted Dowson", "ted@gmail.com", setFormattedDate("01/05/1990"), 3500.0, depart);
-		sellerDao.insert(seller2);
-		System.out.println("New seller added. Id = " + seller2.getId());
+//		Seller seller2 = new Seller(null, "Ted Dowson", "ted@gmail.com", setFormattedDate("01/05/1990"), 3500.0, depart);
+//		sellerDao.insert(seller2);
+//		System.out.println("New seller added. Id = " + seller2.getId());
 		
 		System.out.println("\n=== teste 5 - SellerDao - update() ===");
 		Seller seller3 = sellerDao.findById(7);
@@ -46,6 +49,31 @@ public class Main {
 		sellerDao.update(seller3);
 		System.out.println("Seller updated: " + seller3.toString());
 		
+		System.out.println("\n=== teste 6 - SellerDao - delete() ===");
+		char confirm = 'x';
+		while (confirm != 'y' && confirm != 'n') {
+			System.out.print("Enter seller id to delete: ");
+			int sellerId = sc.nextInt();
+			sc.nextLine();
+			System.out.println(sellerDao.findById(sellerId));
+			System.out.print("Confirm seller to delete (y/n)? ");
+			confirm = sc.nextLine().charAt(0);
+			if(confirm == 'y') {
+				sellerDao.delete(sellerId);
+				System.out.println("Seller deleted!");
+			}
+			if(confirm == 'n') {
+				System.out.print("Try another id (y/n)? ");
+				confirm = sc.nextLine().charAt(0);
+				if(confirm == 'y') {
+					confirm = 'x';					
+				}
+			}
+		}
+		System.out.println("Process finished.");
+		
+		
+		sc.close();
 	}
 	
 	private static Date setFormattedDate(String date){
