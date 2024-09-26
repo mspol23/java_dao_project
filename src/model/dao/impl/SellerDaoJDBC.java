@@ -48,7 +48,7 @@ public class SellerDaoJDBC implements SellerDao {
 				DB.closeResultSet(rs);
 			}
 			else {
-				throw new DBException("Unexpected error! Row not created.");
+				throw new DBException("Unexpected error! No rows affected.");
 			}
 
 		}
